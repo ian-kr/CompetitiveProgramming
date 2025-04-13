@@ -1,42 +1,55 @@
-#include <bits/stdc++.h>
+/**
+ * @author: Ian Kristona
+ * Date: 4/4/2025
+ * Problem: Dice Combinations
+ * Link: https://cses.fi/problemset/task/1634
+ */
 
-using namespace std;
+ #include <bits/stdc++.h>
 
-typedef long long ll;
+ using namespace std;
 
-const ll MOD = 1e9 +7;
+ typedef long long ll;
 
-int main(void){
-    
-    
-    ll n,x,res = 0;
-    cin >> n >> x;
-    vector<ll>nums(n);
+ const long long MOD = 1e9+ 7;
+
+ int main(void){
+
+    int res = 0;
+
+    int n,sum; cin >> n >> sum;
+    vector<int> nums(n);
     for(auto& i: nums) cin >> i;
-    // dp[i][j] being the number of ways to construct x
-    vector<vector<ll>> dp(n+1, vector<ll>(x+1,0));
+    sort(nums.begin(), nums.end());
+
+    // dp[i][j] = number of coins to constuct i
+    // if dp[i][j] is -1 then there is no ways to consturct i
+    vector<vector<int>> dp(n+1, vector<int>(sum+1,-1));
+
+    // First columnum is 1 because there is only way to construct 0
     for(int i = 0; i <= n; i++){
         dp[i][0] = 1;
     }
-    
+
     for(ll i = 1; i <= n; i++){
-        for(ll j = 1; j <= x && i-j > 0; j++){
-            dp[i][j] = (dp[i][j]%MOD+dp[i-1][nums[i-1]-j]%MOD)%MOD;
+        for(ll j = 1; j <= sum && (nums[i-1]-j) >= 0; j++){
+            if(dp[i-1][nums[i-1]-j] != -1){
+                dp[i][j] = dp[i-1][nums[i-1]-j] + 1;
+            }
+            if(j == sum && dp[i][j] != -1){
+                res = (res + dp[i][j]) % MOD;
+            }
         }
     }
-    
-    for(int i = 0; i <= n; i++){
-        res = ((res%MOD)+dp[i][x]%MOD)%MOD;
-    }
 
-    for(auto v: dp){
-        for(auto i: v){
-            cout << i << ' ';
+    for(auto vec: dp){
+        for(auto num: vec){
+            cout << num << ' ';
         }
         cout << endl;
     }
-    
-    cout << res << endl;
-    
+
+    cout << res%MOD<< endl;
+
     return 0;
-}
+ }
