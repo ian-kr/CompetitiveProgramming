@@ -2,29 +2,25 @@
 
 using namespace std;
 
-int n;
-vector<long long> nums;
+long long n;
+vector< long long> nums;
 vector<bool> used;
-int mainSum = 0;
+long long mainSum = 0;
 long long res = -1;
 set<long long> sums;
 
-void bt(int idx, int sum1){
-    // We can check the difference at every branch
+void bt(long long idx, long long sum1){
+    // already checked
     if(sums.count(sum1)) return;
     sums.insert(sum1);
-    long long sum2 = 0;
-    for(int i = 0; i < n; i++){
-        // add the "non used" can be assumed to be contained in sum2
-        if(used[i]) continue;
-        sum2+=nums[i];
+    long long diff = abs(sum1-(mainSum-sum1));
+    if(res > diff){
+        res=diff;
+        return;
     }
-    (res!=-1) ? res = min(res,abs(sum1-sum2)) : res = abs(sum1-sum2);
     // No further changes can be made
     if(idx == n) return;
-    //if(mainSum == (sum1 + sum2)) return;
-
-    for(int i = 0; i < n; i++){
+    for(int i = idx; i < n; i++){
         if(used[i]) continue;
         // add changes
         sum1+=nums[i];
@@ -38,20 +34,19 @@ void bt(int idx, int sum1){
 int main(void){
 
     cin >> n;
-    nums =  vector<long long>(n,0);
+    nums =  vector< long long>(n,0);
     used = vector<bool>(n,false);
     for(auto& i: nums) {
         cin >> i;
         mainSum+=i;
     }
-
+    res = mainSum;
+    // Everything is 1
+    if(mainSum == n){
+        (mainSum%2==0)?cout<<0<<endl : cout <<1<<endl;
+        return 0;
+    }
     bt(0,0);
-
     cout << res << endl;
-
-
-
-
-
     return 0;
 }
