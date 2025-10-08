@@ -1,3 +1,10 @@
+/**
+ * @author: Ian Kristona
+ * Date: 10/7/2025
+ * Problem: Apple Division
+ * Link: https://cses.fi/problemset/task/1621
+ */
+
 #include <bits/stdc++.h>
 
 using namespace std;
